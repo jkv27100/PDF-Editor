@@ -1,17 +1,13 @@
-import React from 'react';
-import { Header, Button } from 'semantic-ui-react';
+import React from "react";
+import { Header, Button } from "semantic-ui-react";
 
-interface Props {
+interface IProps {
   onConfirm: () => void;
   onDismiss: () => void;
   title: string;
 }
 
-export const ConfirmContent: React.FC<Props> = ({
-  title,
-  onConfirm,
-  onDismiss,
-}) => (
+export const ConfirmContent = ({ title, onConfirm, onDismiss }: IProps) => (
   <div>
     <Header as="h4" inverted>
       {title}

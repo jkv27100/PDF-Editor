@@ -1,6 +1,7 @@
 import { readAsArrayBuffer } from "./asyncReader";
 import { PDFDocument } from "pdf-lib";
 import download from "downloadjs";
+import { ITextAttachment } from "../interface";
 
 export async function save(
   pdfFile: File,
@@ -25,7 +26,7 @@ export async function save(
     const embedProcesses = pageObjects.map(async (object: Attachment) => {
       if (object.type === "text") {
         const { x, y, text, lineHeight, size, fontFamily, width } =
-          object as TextAttachment;
+          object as ITextAttachment;
 
         if (text && fontFamily) {
           const pdfFont = await pdfDoc.embedFont(fontFamily);

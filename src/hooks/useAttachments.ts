@@ -1,18 +1,12 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer, useCallback } from "react";
+import { ActionType } from "../entities";
+import { IState } from "../interface";
 
-enum ActionType {
-  RESET = 'RESET',
-  ADD_ATTACHMENT = 'ADD_ATTACHMENT',
-  REMOVE_ATTACHMENT = 'REMOVE_ATTACHMENT',
-  UPDATE_ATTACHMENT = 'UPDATE_ATTACHMENT',
-  UPDATE_PAGE_INDEX = 'UPDATE_PAGE_INDEX',
-}
-
-interface State {
-  pageIndex: number;
-  allPageAttachments: Attachments[];
-  pageAttachments: Attachments;
-}
+const initialState: IState = {
+  pageIndex: -1,
+  allPageAttachments: [],
+  pageAttachments: [],
+};
 
 type Action =
   | { type: ActionType.UPDATE_PAGE_INDEX; pageIndex: number }
@@ -25,13 +19,7 @@ type Action =
     }
   | { type: ActionType.RESET; numberOfPages: number };
 
-const initialState: State = {
-  pageIndex: -1,
-  allPageAttachments: [],
-  pageAttachments: [],
-};
-
-const reducer = (state: State, action: Action) => {
+const reducer = (state: IState, action: Action) => {
   const { pageIndex, allPageAttachments, pageAttachments } = state;
 
   switch (action.type) {

@@ -1,22 +1,21 @@
-import React from "react";
 import { AttachmentTypes } from "../entities";
 import { Text } from "../containers/Text";
+import { IDimensions, ITextAttachment } from "../interface";
 
-interface Props {
+interface IProps {
   attachments: Attachment[];
   pdfName: string;
-  pageDimensions: Dimensions;
+  pageDimensions: IDimensions;
   removeAttachment: (index: number) => void;
   updateAttachment: (index: number, attachment: Partial<Attachment>) => void;
 }
 
-export const Attachments: React.FC<Props> = ({
+export const Attachments = ({
   attachments,
   pdfName,
   pageDimensions,
-  removeAttachment,
   updateAttachment,
-}) => {
+}: IProps) => {
   const handleAttachmentUpdate =
     (index: number) => (attachment: Partial<Attachment>) =>
       updateAttachment(index, attachment);
@@ -33,7 +32,7 @@ export const Attachments: React.FC<Props> = ({
                   pageWidth={pageDimensions.width}
                   pageHeight={pageDimensions.height}
                   updateTextAttachment={handleAttachmentUpdate(index)}
-                  {...(attachment as TextAttachment)}
+                  {...(attachment as ITextAttachment)}
                 />
               );
             }

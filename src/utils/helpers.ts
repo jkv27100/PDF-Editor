@@ -1,7 +1,4 @@
-interface Position {
-  top: number;
-  left: number;
-}
+import { IPosition } from "../interface";
 
 export function ggID(): () => number {
   let id = 0;
@@ -19,7 +16,7 @@ export const getMovePosition = (
   height: number,
   pageWidth: number,
   pageHeight: number
-): Position => {
+): IPosition => {
   const newPositionTop = y + dragY;
   const newPositionLeft = x + dragX;
   const newPositionRight = newPositionLeft + width;

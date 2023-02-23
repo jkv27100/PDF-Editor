@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { Text as Component } from '../components/Text';
-import { getMovePosition } from '../utils/helpers';
-import { DragActions, TextMode } from '../entities';
+import React, { useState, useRef } from "react";
+import { Text as Component } from "../components/Text";
+import { getMovePosition } from "../utils/helpers";
+import { DragActions, TextMode } from "../entities";
+import { ITextAttachment } from "../interface";
 
-interface Props {
+interface IProps {
   pageWidth: number;
   pageHeight: number;
-  updateTextAttachment: (textObject: Partial<TextAttachment>) => void;
+  updateTextAttachment: (textObject: Partial<ITextAttachment>) => void;
 }
 
 export const Text = ({
@@ -21,9 +22,9 @@ export const Text = ({
   pageHeight,
   pageWidth,
   updateTextAttachment,
-}: TextAttachment & Props) => {
+}: ITextAttachment & IProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(text || '');
+  const [content, setContent] = useState(text || "");
   const [mouseDown, setMouseDown] = useState(false);
   const [positionTop, setPositionTop] = useState(y);
   const [positionLeft, setPositionLeft] = useState(x);

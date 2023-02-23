@@ -1,8 +1,6 @@
 import React, { useState, createRef } from "react";
+import { IPDFDoc } from "../interface";
 import { readAsPDF } from "../utils/asyncReader";
-import { Pdf } from "./usePdf";
-
-type ActionEvent<T> = React.TouchEvent<T> | React.MouseEvent<T>;
 
 export enum UploadTypes {
   PDF = "pdf",
@@ -18,7 +16,7 @@ const handlers = {
         pages: Array(pdf.numPages)
           .fill(0)
           .map((_, index) => pdf.getPage(index + 1)),
-      } as Pdf;
+      } as IPDFDoc;
     } catch (error) {
       console.log("Failed to load pdf", error);
       throw new Error("Failed to load PDF");
@@ -39,7 +37,7 @@ export const useUploader = ({
   afterUploadPdf,
 }: {
   use: UploadTypes;
-  afterUploadPdf?: (upload: Pdf) => void;
+  afterUploadPdf?: (upload: IPDFDoc) => void;
   afterUploadAttachment?: (upload: Attachment) => void;
 }) => {
   const [isUploading, setIsUploading] = useState(false);
@@ -78,7 +76,7 @@ export const useUploader = ({
     const result = await handlers[use](file);
 
     if (use === UploadTypes.PDF && afterUploadPdf) {
-      afterUploadPdf(result as Pdf);
+      afterUploadPdf(result as IPDFDoc);
     }
 
     setIsUploading(false);

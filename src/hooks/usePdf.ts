@@ -1,16 +1,11 @@
-import { useState, useCallback } from 'react';
-import { save } from '../utils/pdf';
-
-export interface Pdf {
-  name: string;
-  file: File;
-  pages: Promise<any>[];
-}
+import { useState, useCallback } from "react";
+import { IDimensions, IPDFDoc } from "../interface";
+import { save } from "../utils/pdf";
 
 export const usePdf = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [pageIndex, setPageIndex] = useState(-1);
-  const [dimensions, setDimensions] = useState<Dimensions>();
+  const [dimensions, setDimensions] = useState<IDimensions>();
   const [file, setFile] = useState<File>();
   const [pages, setPages] = useState<any>([]);
   const [isMultiPage, setIsMultiPage] = useState(false);
@@ -35,7 +30,7 @@ export const usePdf = () => {
     setIsLastPage(newPageIndex === pages.length - 1);
   };
 
-  const initialize = ({ name, file, pages: _pages }: Pdf) => {
+  const initialize = ({ name, file, pages: _pages }: IPDFDoc) => {
     const multi = _pages.length > 1;
     setName(name);
     setFile(file);

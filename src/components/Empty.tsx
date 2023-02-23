@@ -1,11 +1,10 @@
-import React from "react";
 import { Segment, Header, Icon, Button } from "semantic-ui-react";
 
-interface Props {
+interface IProps {
   loading: boolean;
   uploadPdf: () => void;
 }
-export const Empty: React.FC<Props> = ({ loading, uploadPdf }) => (
+export const Empty = ({ loading, uploadPdf }: IProps) => (
   <Segment placeholder loading={loading} style={{ height: "80vh" }}>
     <Header icon>
       <Icon name="file pdf outline" />

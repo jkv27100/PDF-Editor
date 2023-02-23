@@ -1,7 +1,6 @@
-import React from "react";
 import { Menu, Dropdown } from "semantic-ui-react";
 
-interface Props {
+interface IProps {
   uploadNewPdf: () => void;
   addText: () => void;
   isPdfLoaded: boolean;
@@ -9,13 +8,13 @@ interface Props {
   savePdf: () => void;
 }
 
-export const MenuBar: React.FC<Props> = ({
+export const MenuBar = ({
   uploadNewPdf,
   addText,
   isPdfLoaded,
   savingPdfStatus,
   savePdf,
-}) => (
+}: IProps) => (
   <Menu pointing>
     <Menu.Item header>PDF Editor</Menu.Item>
     <Menu.Menu position="right">

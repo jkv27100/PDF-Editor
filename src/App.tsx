@@ -3,7 +3,7 @@ import "semantic-ui-css/semantic.min.css";
 
 import { Container, Grid, Button, Segment } from "semantic-ui-react";
 import { MenuBar } from "./components/MenuBar";
-import { usePdf, Pdf } from "./hooks/usePdf";
+import { usePdf } from "./hooks/usePdf";
 import { AttachmentTypes } from "./entities";
 import { ggID } from "./utils/helpers";
 import { useAttachments } from "./hooks/useAttachments";
@@ -11,6 +11,7 @@ import { useUploader, UploadTypes } from "./hooks/useUploader";
 import { Empty } from "./components/Empty";
 import { Page } from "./components/Page";
 import { Attachments } from "./components/Attachments";
+import { IPDFDoc, ITextAttachment } from "./interface";
 
 const App: React.FC = () => {
   const {
@@ -39,7 +40,7 @@ const App: React.FC = () => {
     setPageIndex,
   } = useAttachments();
 
-  const initializePageAndAttachments = (pdfDetails: Pdf) => {
+  const initializePageAndAttachments = (pdfDetails: IPDFDoc) => {
     initialize(pdfDetails);
     const numberOfPages = pdfDetails.pages.length;
     resetAttachments(numberOfPages);
@@ -57,7 +58,7 @@ const App: React.FC = () => {
   });
 
   const addText = () => {
-    const newTextAttachment: TextAttachment = {
+    const newTextAttachment: ITextAttachment = {
       id: ggID(),
       type: AttachmentTypes.TEXT,
       x: 0,
