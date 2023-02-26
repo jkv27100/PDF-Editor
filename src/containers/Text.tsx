@@ -3,6 +3,7 @@ import { Text as Component } from "../components/Text";
 import { getMovePosition } from "../utils/helpers";
 import { DragActions, TextMode } from "../entities";
 import { ITextAttachment } from "../interface";
+import ResizableField from "../components/ResizableField";
 
 interface IProps {
   pageWidth: number;
@@ -13,7 +14,7 @@ interface IProps {
 export const Text = ({
   x,
   y,
-  text,
+  placeholder,
   width,
   height,
   lineHeight,
@@ -24,7 +25,7 @@ export const Text = ({
   updateTextAttachment,
 }: ITextAttachment & IProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(text || "");
+  const [content, setContent] = useState(placeholder || "");
   const [mouseDown, setMouseDown] = useState(false);
   const [positionTop, setPositionTop] = useState(y);
   const [positionLeft, setPositionLeft] = useState(x);
@@ -89,14 +90,6 @@ export const Text = ({
       });
     }
 
-    // if (operation === DragActions.SCALE) {
-    //     updateTextObject({
-    //         x: positionLeft,
-    //         y: positionTop,
-    //     });
-
-    // }
-
     setOperation(DragActions.NO_MOVEMENT);
   };
 
@@ -118,7 +111,7 @@ export const Text = ({
     const lines = [content];
     updateTextAttachment({
       lines,
-      text: content,
+      placeholder: content,
     });
   };
 
@@ -143,11 +136,27 @@ export const Text = ({
   };
 
   return (
-    <Component
-      text={content}
-      width={width}
-      height={height}
+    // <Component
+    //   text={content}
+    //   width={width}
+    //   height={height}
+    //   mode={textMode}
+    //   size={size}
+    //   lineHeight={lineHeight}
+    //   inputRef={inputRef}
+    //   fontFamily={fontFamily}
+    //   positionTop={positionTop}
+    //   onChangeText={onChangeText}
+    //   positionLeft={positionLeft}
+    //   handleMouseUp={handleMouseUp}
+    //   toggleEditMode={toggleEditMode}
+    //   handleMouseOut={handleMouseOut}
+    //   handleMouseDown={handleMousedown}
+    //   handleMouseMove={handleMouseMove}
+    // />
+    <ResizableField
       mode={textMode}
+      placeholder={placeholder}
       size={size}
       lineHeight={lineHeight}
       inputRef={inputRef}
@@ -155,8 +164,8 @@ export const Text = ({
       positionTop={positionTop}
       onChangeText={onChangeText}
       positionLeft={positionLeft}
-      handleMouseUp={handleMouseUp}
       toggleEditMode={toggleEditMode}
+      handleMouseUp={handleMouseUp}
       handleMouseOut={handleMouseOut}
       handleMouseDown={handleMousedown}
       handleMouseMove={handleMouseMove}

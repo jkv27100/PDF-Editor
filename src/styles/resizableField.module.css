@@ -1,0 +1,70 @@
+.resizable {
+  height: 60px;
+  width: 160px;
+  min-width: 150px;
+  min-height: 50px;
+  position: absolute;
+  background-color: transparent;
+}
+
+.resizableInput {
+  position: absolute;
+  word-wrap: break-word;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 120px;
+  min-height: 20px;
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  height: 30px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.resizers {
+  width: 100%;
+  height: 100%;
+  border: 1px black;
+  border-style: dotted;
+  box-sizing: border-box;
+}
+
+.resizers .resizer {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #4286f4;
+  position: absolute;
+}
+
+.resizer.top {
+  left: 50%;
+  top: -4px;
+  cursor: ns-resize;
+  transform: translate(-7px, 0px);
+}
+
+.resizer.right {
+  right: -4px;
+  bottom: 50%;
+  cursor: ew-resize;
+  transform: translate(0px, 5px);
+}
+
+.resizer.bottom {
+  left: 50%;
+  bottom: -4px;
+  cursor: ns-resize;
+  transform: translate(-7px, 0px);
+}
+
+.resizer.left {
+  left: -4px;
+  bottom: 50%;
+  cursor: ew-resize;
+  transform: translate(0px, 5px);
+}

@@ -5,7 +5,7 @@ export interface IState {
 }
 
 export interface ITextAttachment extends IAttachmentBase {
-  text?: string;
+  placeholder?: string;
   fontFamily?: string;
   size?: number;
   lineHeight?: number;

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import "semantic-ui-css/semantic.min.css";
 
 import { Container, Grid, Button, Segment } from "semantic-ui-react";
@@ -12,8 +12,9 @@ import { Empty } from "./components/Empty";
 import { Page } from "./components/Page";
 import { Attachments } from "./components/Attachments";
 import { IPDFDoc, ITextAttachment } from "./interface";
+import ResizableField from "./components/ResizableField";
 
-const App: React.FC = () => {
+const App = () => {
   const {
     file,
     initialize,
@@ -30,6 +31,7 @@ const App: React.FC = () => {
     name,
     dimensions,
   } = usePdf();
+
   const {
     add: addAttachment,
     allPageAttachments,
@@ -64,11 +66,11 @@ const App: React.FC = () => {
       x: 0,
       y: 0,
       width: 120,
-      height: 25,
-      size: 16,
+      height: 16,
+      size: 14,
       lineHeight: 1.4,
       fontFamily: "Times-Roman",
-      text: "Enter Text Here",
+      placeholder: "Enter",
     };
     addAttachment(newTextAttachment);
   };
@@ -115,11 +117,7 @@ const App: React.FC = () => {
             </Grid.Column>
             <Grid.Column width={10}>
               {currentPage && (
-                <Segment
-                  data-testid="page"
-                  compact
-                  stacked={isMultiPage && !isLastPage}
-                >
+                <Segment compact stacked={isMultiPage && !isLastPage}>
                   <div style={{ position: "relative" }}>
                     <Page
                       dimensions={dimensions}

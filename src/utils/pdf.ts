@@ -25,13 +25,13 @@ export async function save(
     const pageHeight = page.getHeight();
     const embedProcesses = pageObjects.map(async (object: Attachment) => {
       if (object.type === "text") {
-        const { x, y, text, lineHeight, size, fontFamily, width } =
+        const { x, y, placeholder, lineHeight, size, fontFamily, width } =
           object as ITextAttachment;
 
-        if (text && fontFamily) {
+        if (placeholder && fontFamily) {
           const pdfFont = await pdfDoc.embedFont(fontFamily);
           return () =>
-            page.drawText(text, {
+            page.drawText(placeholder, {
               maxWidth: width,
               font: pdfFont,
               size,
