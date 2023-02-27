@@ -1,6 +1,6 @@
-import { AttachmentTypes } from "../entities";
-import { Text } from "../containers/Text";
-import { IDimensions, ITextAttachment } from "../interface";
+import { AttachmentTypes } from '../entities';
+import { Text } from '../containers/Text';
+import { IDimensions, ITextAttachment } from '../interface';
 
 interface IProps {
   attachments: Attachment[];
@@ -15,20 +15,20 @@ export const Attachments = ({
   pdfName,
   pageDimensions,
   updateAttachment,
+  removeAttachment,
 }: IProps) => {
-  const handleAttachmentUpdate =
-    (index: number) => (attachment: Partial<Attachment>) =>
-      updateAttachment(index, attachment);
-
+  const handleAttachmentUpdate = (index: number) => (attachment: Partial<Attachment>) =>
+    updateAttachment(index, attachment);
   return attachments ? (
     <>
       {attachments.length
         ? attachments.map((attachment, index) => {
-            const key = `${pdfName}-${index}`;
+            const key = `${attachment.id}`;
             if (attachment.type === AttachmentTypes.TEXT) {
               return (
                 <Text
                   key={key}
+                  attachmentIndex={index}
                   pageWidth={pageDimensions.width}
                   pageHeight={pageDimensions.height}
                   updateTextAttachment={handleAttachmentUpdate(index)}

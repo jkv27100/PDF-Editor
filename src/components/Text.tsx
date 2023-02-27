@@ -1,7 +1,8 @@
-import React, { RefObject } from "react";
-import { TextMode } from "../entities";
+import React, { RefObject } from 'react';
+import { TextMode } from '../entities';
 
 interface IProps {
+  id: string;
   inputRef: RefObject<HTMLInputElement>;
   text?: string;
   mode: string;
@@ -52,35 +53,35 @@ export const Text = ({
         fontFamily,
         fontSize: size,
         lineHeight,
-        cursor: mode === TextMode.COMMAND ? "move" : "default",
+        cursor: mode === TextMode.COMMAND ? 'move' : 'default',
         top: positionTop,
         left: positionLeft,
-        borderColor: "gray",
-        borderStyle: "solid",
-        wordWrap: "break-word",
+        borderColor: 'gray',
+        borderStyle: 'solid',
+        wordWrap: 'break-word',
         padding: 0,
-        position: "absolute",
+        position: 'absolute',
       }}
     >
       <input
-        type="text"
+        type='text'
         ref={inputRef}
         onChange={onChangeText}
         readOnly={mode === TextMode.COMMAND}
         style={{
-          width: "100%",
-          borderStyle: "none",
+          width: '100%',
+          borderStyle: 'none',
           borderWidth: 0,
           fontFamily,
           fontSize: size,
-          outline: "none",
+          outline: 'none',
           padding: 0,
-          boxSizing: "border-box",
+          boxSizing: 'border-box',
           lineHeight,
           height,
           margin: 0,
-          backgroundColor: "transparent",
-          cursor: mode === TextMode.COMMAND ? "move" : "text",
+          backgroundColor: 'transparent',
+          cursor: mode === TextMode.COMMAND ? 'move' : 'text',
         }}
         value={text}
       />

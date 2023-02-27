@@ -1,17 +1,21 @@
-import React, { useState, useRef } from "react";
-import { Text as Component } from "../components/Text";
-import { getMovePosition } from "../utils/helpers";
-import { DragActions, TextMode } from "../entities";
-import { ITextAttachment } from "../interface";
-import ResizableField from "../components/ResizableField";
+import React, { useState, useRef, useContext } from 'react';
+import { Text as Component } from '../components/Text';
+import { getMovePosition } from '../utils/helpers';
+import { DragActions, TextMode } from '../entities';
+import { ITextAttachment } from '../interface';
+import ResizableField from '../components/ResizableField';
+import { useAttachments } from '../hooks/useAttachments';
+import { AttachmentContext, AttachmentContextType } from '../context/AttachmentContext';
 
 interface IProps {
   pageWidth: number;
   pageHeight: number;
   updateTextAttachment: (textObject: Partial<ITextAttachment>) => void;
+  attachmentIndex: number;
 }
 
 export const Text = ({
+  id,
   x,
   y,
   placeholder,
@@ -23,16 +27,17 @@ export const Text = ({
   pageHeight,
   pageWidth,
   updateTextAttachment,
+  attachmentIndex,
 }: ITextAttachment & IProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(placeholder || "");
+  const [content, setContent] = useState(placeholder || '');
   const [mouseDown, setMouseDown] = useState(false);
   const [positionTop, setPositionTop] = useState(y);
   const [positionLeft, setPositionLeft] = useState(x);
-  const [operation, setOperation] = useState<DragActions>(
-    DragActions.NO_MOVEMENT
-  );
+  const [operation, setOperation] = useState<DragActions>(DragActions.NO_MOVEMENT);
   const [textMode, setTextMode] = useState<TextMode>(TextMode.COMMAND);
+
+  const { remove } = useAttachments();
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -117,8 +122,7 @@ export const Text = ({
 
   const toggleEditMode = () => {
     const input = inputRef.current;
-    const mode =
-      textMode === TextMode.COMMAND ? TextMode.INSERT : TextMode.COMMAND;
+    const mode = textMode === TextMode.COMMAND ? TextMode.INSERT : TextMode.COMMAND;
 
     setTextMode(mode);
 
@@ -133,6 +137,14 @@ export const Text = ({
   const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     setContent(value);
+  };
+
+  const { store, setStore } = useContext(AttachmentContext) as AttachmentContextType;
+
+  console.log(store);
+  const handleAttachmentRemove = () => {
+    console.log('cliked on ', attachmentIndex);
+    remove(attachmentIndex);
   };
 
   return (
@@ -155,6 +167,8 @@ export const Text = ({
     //   handleMouseMove={handleMouseMove}
     // />
     <ResizableField
+      id={id}
+      handleAttachmentRemove={handleAttachmentRemove}
       mode={textMode}
       placeholder={placeholder}
       size={size}

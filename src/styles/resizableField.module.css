@@ -1,10 +1,29 @@
 .resizable {
-  height: 60px;
-  width: 160px;
-  min-width: 150px;
-  min-height: 50px;
+  height: 40px;
+  width: 120px;
+  min-width: 100px;
+  min-height: 20px;
   position: absolute;
   background-color: transparent;
+}
+
+.removeIcon {
+  position: absolute;
+  right: -20px;
+  top: -2px;
+  width: 15px;
+  height: 15px;
+  background-color: #ff0000;
+  color: white;
+  border-radius: 50%;
+  font-size: larger;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeIcon:hover {
+  cursor: pointer;
 }
 
 .resizableInput {
@@ -13,12 +32,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 120px;
-  min-height: 20px;
+  min-width: 100px;
+  min-height: 10px;
   margin: 0;
   padding: 0;
-  width: 100px;
-  height: 30px;
+  width: 90px;
+  height: 20px;
+  text-align: center;
   border: none;
   outline: none;
   background-color: transparent;
@@ -27,44 +47,65 @@
 .resizers {
   width: 100%;
   height: 100%;
-  border: 1px black;
-  border-style: dotted;
-  box-sizing: border-box;
+  border: 2px solid #00aae5;
 }
 
 .resizers .resizer {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: white;
-  border: 3px solid #4286f4;
   position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border: 2px solid #00aae5;
 }
 
 .resizer.top {
   left: 50%;
-  top: -4px;
+  top: -3px;
   cursor: ns-resize;
-  transform: translate(-7px, 0px);
+  transform: translate(-5px, 0px);
+}
+
+.resizer.topRight {
+  right: -3px;
+  top: -3px;
+  cursor: sw-resize;
 }
 
 .resizer.right {
-  right: -4px;
+  right: -3px;
   bottom: 50%;
   cursor: ew-resize;
-  transform: translate(0px, 5px);
+  transform: translate(0px, 4px);
+}
+
+.resizer.bottomRight {
+  right: -3px;
+  bottom: -3px;
+  cursor: nw-resize;
 }
 
 .resizer.bottom {
   left: 50%;
-  bottom: -4px;
+  bottom: -3px;
   cursor: ns-resize;
-  transform: translate(-7px, 0px);
+  transform: translate(-5px, 0px);
+}
+
+.resizer.bottomLeft {
+  left: -3px;
+  bottom: -3px;
+  cursor: sw-resize;
 }
 
 .resizer.left {
-  left: -4px;
+  left: -3px;
   bottom: 50%;
   cursor: ew-resize;
-  transform: translate(0px, 5px);
+  transform: translate(0px, 4px);
+}
+
+.resizer.topLeft {
+  left: -3px;
+  top: -3px;
+  cursor: nw-resize;
 }

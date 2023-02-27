@@ -1,4 +1,4 @@
-export interface IState {
+export interface IStore {
   pageIndex: number;
   allPageAttachments: Attachments[];
   pageAttachments: Attachments;
@@ -25,7 +25,7 @@ export interface IPosition {
 }
 
 export interface IAttachmentBase {
-  id: () => number;
+  id: string;
   width: number;
   height: number;
   x: number;

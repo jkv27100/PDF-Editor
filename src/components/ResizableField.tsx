@@ -1,11 +1,11 @@
-import { RefObject, useEffect, useRef } from "react";
-import Draggable from "react-draggable";
-import { TextMode } from "../entities";
-import styles from "../styles/resizableField.module.css";
-import makeResizableElement from "../utils/makeResizableElement";
+import { RefObject, useEffect, useRef } from 'react';
+import { TextMode } from '../entities';
+import styles from '../styles/resizableField.module.css';
+import makeResizableElement from '../utils/makeResizableElement';
 
 interface IProps {
   inputRef: RefObject<HTMLInputElement>;
+  id: string;
   mode: string;
   size?: number;
   placeholder?: string;
@@ -19,10 +19,12 @@ interface IProps {
   handleMouseOut: DragEventListener<HTMLDivElement>;
   toggleEditMode: () => void;
   onChangeText: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleAttachmentRemove: () => void;
 }
 
 function ResizableField({
   inputRef,
+  id,
   mode,
   size,
   placeholder,
@@ -36,6 +38,7 @@ function ResizableField({
   handleMouseOut,
   handleMouseUp,
   lineHeight,
+  handleAttachmentRemove,
 }: IProps) {
   const resizeDivRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +46,7 @@ function ResizableField({
     if (resizeDivRef.current && inputRef.current) {
       makeResizableElement(
         resizeDivRef.current,
-        document.querySelectorAll("#resizer"),
+        document.querySelectorAll('#resizer'),
         inputRef.current,
         positionLeft,
         positionTop
@@ -57,6 +60,7 @@ function ResizableField({
       className={styles.resizable}
       onDoubleClick={toggleEditMode}
       onMouseDown={handleMouseDown}
+      id={id}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseOut={handleMouseOut}
@@ -64,31 +68,33 @@ function ResizableField({
         fontFamily,
         fontSize: size,
         lineHeight,
-        cursor: mode === TextMode.COMMAND ? "move" : "default",
+        cursor: `${mode === TextMode.COMMAND ? 'move' : 'default'},all-scroll`,
         top: positionTop,
         left: positionLeft,
       }}
     >
-      <div className={styles.resizers}>
+      <div id={id} className={styles.resizers}>
+        <div id='remove' className={`${styles.removeIcon}`} onClick={handleAttachmentRemove}>
+          &times;
+        </div>
+        {/* change accessing resizers by classname because when you resize one everything else will resize */}
+        <div id='resizer' className={`${styles.resizer} ${styles.top} topResizer`}></div>
+        <div id='resizer' className={`${styles.resizer} ${styles.topRight} topRightResizer`}></div>
+        <div id='resizer' className={`${styles.resizer} ${styles.right} rightResizer`}></div>
         <div
-          id="resizer"
-          className={`${styles.resizer} ${styles.top} topResizer`}
+          id='resizer'
+          className={`${styles.resizer} ${styles.bottomRight} bottomRightResizer`}
         ></div>
+        <div id='resizer' className={`${styles.resizer} ${styles.bottom} bottomResizer`}></div>
         <div
-          id="resizer"
-          className={`${styles.resizer} ${styles.right} rightResizer`}
+          id='resizer'
+          className={`${styles.resizer} ${styles.bottomLeft} bottomLeftResizer`}
         ></div>
-        <div
-          id="resizer"
-          className={`${styles.resizer} ${styles.bottom} bottomResizer`}
-        ></div>
-        <div
-          id="resizer"
-          className={`${styles.resizer} ${styles.left} leftResizer`}
-        ></div>
+        <div id='resizer' className={`${styles.resizer} ${styles.left} leftResizer`}></div>
+        <div id='resizer' className={`${styles.resizer} ${styles.topLeft} topLeftResizer`}></div>
       </div>
       <input
-        type="text"
+        type='text'
         ref={inputRef}
         placeholder={placeholder}
         onChange={onChangeText}
@@ -97,7 +103,7 @@ function ResizableField({
           fontFamily,
           fontSize: size,
           lineHeight,
-          cursor: mode === TextMode.COMMAND ? "move" : "text",
+          cursor: mode === TextMode.COMMAND ? 'move' : 'text',
         }}
         className={styles.resizableInput}
       />

@@ -1,8 +1,8 @@
-import { useReducer, useCallback } from "react";
-import { ActionType } from "../entities";
-import { IState } from "../interface";
+import { useReducer, useCallback } from 'react';
+import { ActionType } from '../entities';
+import { IStore } from '../interface';
 
-const initialState: IState = {
+const initialState: IStore = {
   pageIndex: -1,
   allPageAttachments: [],
   pageAttachments: [],
@@ -19,16 +19,13 @@ type Action =
     }
   | { type: ActionType.RESET; numberOfPages: number };
 
-const reducer = (state: IState, action: Action) => {
+const reducer = (state: IStore, action: Action) => {
   const { pageIndex, allPageAttachments, pageAttachments } = state;
 
   switch (action.type) {
     case ActionType.ADD_ATTACHMENT: {
-      const newAllPageAttachmentsAdd = allPageAttachments.map(
-        (attachments, index) =>
-          pageIndex === index
-            ? [...attachments, action.attachment]
-            : attachments
+      const newAllPageAttachmentsAdd = allPageAttachments.map((attachments, index) =>
+        pageIndex === index ? [...attachments, action.attachment] : attachments
       );
 
       return {
@@ -38,15 +35,24 @@ const reducer = (state: IState, action: Action) => {
       };
     }
     case ActionType.REMOVE_ATTACHMENT: {
+      console.log('on remove page index', pageIndex);
       const newAllPageAttachmentsRemove = allPageAttachments.map(
-        (otherPageAttachments, index) =>
-          pageIndex === index
-            ? pageAttachments.filter(
-                (_, _attachmentIndex) =>
-                  _attachmentIndex !== action.attachmentIndex
-              )
-            : otherPageAttachments
+        (otherPageAttachments, index) => {
+          if (pageIndex === index) {
+            return pageAttachments.filter(
+              (_, _attachmentIndex) => _attachmentIndex !== action.attachmentIndex
+            );
+          }
+          return otherPageAttachments;
+        }
+
+        // pageIndex === index
+        //   ? pageAttachments.filter(
+        //       (_, _attachmentIndex) => _attachmentIndex !== action.attachmentIndex
+        //     )
+        //   : otherPageAttachments
       );
+      console.log(newAllPageAttachmentsRemove);
 
       return {
         ...state,
@@ -59,15 +65,14 @@ const reducer = (state: IState, action: Action) => {
         return state;
       }
 
-      const newAllPageAttachmentsUpdate = allPageAttachments.map(
-        (otherPageAttachments, index) =>
-          pageIndex === index
-            ? pageAttachments.map((oldAttachment, _attachmentIndex) =>
-                _attachmentIndex === action.attachmentIndex
-                  ? { ...oldAttachment, ...action.attachment }
-                  : oldAttachment
-              )
-            : otherPageAttachments
+      const newAllPageAttachmentsUpdate = allPageAttachments.map((otherPageAttachments, index) =>
+        pageIndex === index
+          ? pageAttachments.map((oldAttachment, _attachmentIndex) =>
+              _attachmentIndex === action.attachmentIndex
+                ? { ...oldAttachment, ...action.attachment }
+                : oldAttachment
+            )
+          : otherPageAttachments
       );
 
       return {
@@ -77,6 +82,7 @@ const reducer = (state: IState, action: Action) => {
       };
     }
     case ActionType.UPDATE_PAGE_INDEX: {
+      console.log('on update page index', pageIndex);
       return {
         ...state,
         pageIndex: action.pageIndex,
@@ -113,12 +119,13 @@ export const useAttachments = () => {
       attachment,
     });
 
-  const reset = (numberOfPages: number) =>
-    dispatch({ type: ActionType.RESET, numberOfPages });
+  const reset = (numberOfPages: number) => dispatch({ type: ActionType.RESET, numberOfPages });
 
   const setPageIndex = useCallback(
-    (index: number) =>
-      dispatch({ type: ActionType.UPDATE_PAGE_INDEX, pageIndex: index }),
+    (index: number) => {
+      console.log('number', index);
+      dispatch({ type: ActionType.UPDATE_PAGE_INDEX, pageIndex: index });
+    },
     [dispatch]
   );
 

@@ -1,10 +1,8 @@
-import { IPosition } from "../interface";
+import { IPosition } from '../interface';
+import { v4 as uuid } from 'uuid';
 
-export function ggID(): () => number {
-  let id = 0;
-  return function genId() {
-    return id++;
-  };
+export function ggID(): string {
+  return uuid();
 }
 
 export const getMovePosition = (
@@ -23,17 +21,9 @@ export const getMovePosition = (
   const newPositionBottom = newPositionTop + height;
 
   const top =
-    newPositionTop < 0
-      ? 0
-      : newPositionBottom > pageHeight
-      ? pageHeight - height
-      : newPositionTop;
+    newPositionTop < 0 ? 0 : newPositionBottom > pageHeight ? pageHeight - height : newPositionTop;
   const left =
-    newPositionLeft < 0
-      ? 0
-      : newPositionRight > pageWidth
-      ? pageWidth - width
-      : newPositionLeft;
+    newPositionLeft < 0 ? 0 : newPositionRight > pageWidth ? pageWidth - width : newPositionLeft;
 
   return {
     top,
@@ -41,5 +31,4 @@ export const getMovePosition = (
   };
 };
 
-export const normalize = (value: number): number =>
-  parseFloat((value / 255).toFixed(1));
+export const normalize = (value: number): number => parseFloat((value / 255).toFixed(1));

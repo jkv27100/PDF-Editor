@@ -1,9 +1,9 @@
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
-import { IPDFPage } from "../interface";
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import { IPDFPage } from '../interface';
 
 //This is essential for pdfjs-dist to work
 GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.js";
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.js';
 
 /**
  * This fuction is to read PDF file
@@ -11,9 +11,7 @@ GlobalWorkerOptions.workerSrc =
  * @returns Promise<string | ArrayBuffer | null>
  * */
 
-export const readAsArrayBuffer = (
-  file: File
-): Promise<string | ArrayBuffer | null> => {
+export const readAsArrayBuffer = (file: File): Promise<string | ArrayBuffer | null> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
@@ -28,9 +26,7 @@ export const readAsArrayBuffer = (
  * @returns Promise<string | ArrayBuffer | null>
  * */
 
-export const readAsDataURL = (
-  file: File
-): Promise<string | ArrayBuffer | null> => {
+export const readAsDataURL = (file: File): Promise<string | ArrayBuffer | null> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
