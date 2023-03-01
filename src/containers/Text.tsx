@@ -1,11 +1,9 @@
-import React, { useState, useRef, useContext } from 'react';
-import { Text as Component } from '../components/Text';
+import React, { useState, useRef } from 'react';
 import { getMovePosition } from '../utils/helpers';
 import { DragActions, TextMode } from '../entities';
 import { ITextAttachment } from '../interface';
-import ResizableField from '../components/ResizableField';
+import RNDField from '../components/RNDField';
 import { useAttachments } from '../hooks/useAttachments';
-import { AttachmentContext, AttachmentContextType } from '../context/AttachmentContext';
 
 interface IProps {
   pageWidth: number;
@@ -18,7 +16,7 @@ export const Text = ({
   id,
   x,
   y,
-  placeholder,
+  text,
   width,
   height,
   lineHeight,
@@ -29,17 +27,16 @@ export const Text = ({
   updateTextAttachment,
   attachmentIndex,
 }: ITextAttachment & IProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(placeholder || '');
+  const labelRef = useRef<HTMLLabelElement>(null);
   const [mouseDown, setMouseDown] = useState(false);
   const [positionTop, setPositionTop] = useState(y);
   const [positionLeft, setPositionLeft] = useState(x);
   const [operation, setOperation] = useState<DragActions>(DragActions.NO_MOVEMENT);
   const [textMode, setTextMode] = useState<TextMode>(TextMode.COMMAND);
 
-  const { remove } = useAttachments();
+  const { removeAttachment } = useAttachments();
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLLabelElement>) => {
     event.preventDefault();
 
     if (mouseDown) {
@@ -59,7 +56,7 @@ export const Text = ({
     }
   };
 
-  const handleMousedown = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMousedown = (event: React.MouseEvent<HTMLLabelElement>) => {
     if (textMode !== TextMode.COMMAND) {
       return;
     }
@@ -68,7 +65,7 @@ export const Text = ({
     setOperation(DragActions.MOVE);
   };
 
-  const handleMouseUp = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseUp = (event: React.MouseEvent<HTMLLabelElement>) => {
     event.preventDefault();
 
     if (textMode !== TextMode.COMMAND) {
@@ -78,6 +75,10 @@ export const Text = ({
     setMouseDown(false);
 
     if (operation === DragActions.MOVE) {
+      const element = event.target as HTMLLabelElement;
+
+      const rect = element.getBoundingClientRect();
+
       const { top, left } = getMovePosition(
         positionLeft,
         positionTop,
@@ -98,87 +99,28 @@ export const Text = ({
     setOperation(DragActions.NO_MOVEMENT);
   };
 
-  const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseOut = (event: React.MouseEvent<HTMLLabelElement>) => {
     if (operation === DragActions.MOVE) {
       handleMouseUp(event);
     }
-
-    if (textMode === TextMode.INSERT) {
-      setTextMode(TextMode.COMMAND);
-      prepareTextAndUpdate();
-    }
   };
 
-  const prepareTextAndUpdate = () => {
-    // Deselect any selection when returning to command mode
-    document.getSelection()?.removeAllRanges();
-
-    const lines = [content];
-    updateTextAttachment({
-      lines,
-      placeholder: content,
-    });
-  };
-
-  const toggleEditMode = () => {
-    const input = inputRef.current;
-    const mode = textMode === TextMode.COMMAND ? TextMode.INSERT : TextMode.COMMAND;
-
-    setTextMode(mode);
-
-    if (input && mode === TextMode.INSERT) {
-      input.focus();
-      input.select();
-    } else {
-      prepareTextAndUpdate();
-    }
-  };
-
-  const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.currentTarget.value;
-    setContent(value);
-  };
-
-  const { store, setStore } = useContext(AttachmentContext) as AttachmentContextType;
-
-  console.log(store);
   const handleAttachmentRemove = () => {
-    console.log('cliked on ', attachmentIndex);
-    remove(attachmentIndex);
+    removeAttachment(attachmentIndex);
   };
 
   return (
-    // <Component
-    //   text={content}
-    //   width={width}
-    //   height={height}
-    //   mode={textMode}
-    //   size={size}
-    //   lineHeight={lineHeight}
-    //   inputRef={inputRef}
-    //   fontFamily={fontFamily}
-    //   positionTop={positionTop}
-    //   onChangeText={onChangeText}
-    //   positionLeft={positionLeft}
-    //   handleMouseUp={handleMouseUp}
-    //   toggleEditMode={toggleEditMode}
-    //   handleMouseOut={handleMouseOut}
-    //   handleMouseDown={handleMousedown}
-    //   handleMouseMove={handleMouseMove}
-    // />
-    <ResizableField
+    <RNDField
       id={id}
       handleAttachmentRemove={handleAttachmentRemove}
       mode={textMode}
-      placeholder={placeholder}
+      text={text}
       size={size}
       lineHeight={lineHeight}
-      inputRef={inputRef}
+      labelRef={labelRef}
       fontFamily={fontFamily}
       positionTop={positionTop}
-      onChangeText={onChangeText}
       positionLeft={positionLeft}
-      toggleEditMode={toggleEditMode}
       handleMouseUp={handleMouseUp}
       handleMouseOut={handleMouseOut}
       handleMouseDown={handleMousedown}

@@ -35,6 +35,20 @@ export const readAsDataURL = (file: File): Promise<string | ArrayBuffer | null> 
   });
 };
 
+export const readAsImage = (src: Blob | string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    if (src instanceof Blob) {
+      const url = window.URL.createObjectURL(src);
+      img.src = url;
+    } else {
+      img.src = src;
+    }
+  });
+};
+
 /**
  * This fuction is to read PDF file
  * @param  file This is of type File

@@ -17,7 +17,7 @@ let original_mouse_y = 0;
 function makeResizableElement(
   container: HTMLDivElement,
   resizers: NodeListOf<HTMLDivElement>,
-  textInput: HTMLInputElement,
+  textInput: HTMLLabelElement,
   positionLeft: number,
   positionTop: number
 ) {

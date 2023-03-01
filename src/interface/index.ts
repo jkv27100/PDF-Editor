@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 export interface IStore {
   pageIndex: number;
   allPageAttachments: Attachments[];
@@ -5,7 +7,7 @@ export interface IStore {
 }
 
 export interface ITextAttachment extends IAttachmentBase {
-  placeholder?: string;
+  text?: string;
   fontFamily?: string;
   size?: number;
   lineHeight?: number;
@@ -47,4 +49,21 @@ export interface IPDFDoc {
 export interface ImageAttachment extends IAttachmentBase {
   file: File;
   img: HTMLImageElement;
+}
+
+export interface IRNDFieldProps {
+  labelRef: RefObject<HTMLLabelElement>;
+  id: string;
+  mode: string;
+  size?: number;
+  text?: string;
+  lineHeight?: number;
+  fontFamily?: string;
+  positionTop: number;
+  positionLeft: number;
+  handleMouseDown: DragEventListener<HTMLLabelElement>;
+  handleMouseUp: DragEventListener<HTMLLabelElement>;
+  handleMouseMove: DragEventListener<HTMLLabelElement>;
+  handleMouseOut: DragEventListener<HTMLLabelElement>;
+  handleAttachmentRemove: () => void;
 }

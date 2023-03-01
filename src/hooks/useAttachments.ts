@@ -1,141 +1,102 @@
-import { useReducer, useCallback } from 'react';
-import { ActionType } from '../entities';
+import { useContext } from 'react';
+import { AttachmentContext, AttachmentContextType } from '../context/AttachmentContext';
 import { IStore } from '../interface';
 
-const initialState: IStore = {
-  pageIndex: -1,
-  allPageAttachments: [],
-  pageAttachments: [],
-};
+export const useAttachments = () => {
+  const { store, setStore } = useContext(AttachmentContext) as AttachmentContextType;
+  const { allPageAttachments, pageAttachments, pageIndex } = store;
 
-type Action =
-  | { type: ActionType.UPDATE_PAGE_INDEX; pageIndex: number }
-  | { type: ActionType.ADD_ATTACHMENT; attachment: Attachment }
-  | { type: ActionType.REMOVE_ATTACHMENT; attachmentIndex: number }
-  | {
-      type: ActionType.UPDATE_ATTACHMENT;
-      attachmentIndex: number;
-      attachment: Partial<Attachment>;
-    }
-  | { type: ActionType.RESET; numberOfPages: number };
-
-const reducer = (state: IStore, action: Action) => {
-  const { pageIndex, allPageAttachments, pageAttachments } = state;
-
-  switch (action.type) {
-    case ActionType.ADD_ATTACHMENT: {
+  const addAttachment = (newAttachment: Attachment) => {
+    if (allPageAttachments.length === 0) {
+      let newStore: IStore = {
+        ...store,
+        allPageAttachments: [[newAttachment]],
+        pageAttachments: [newAttachment],
+      };
+      setStore(newStore);
+    } else {
       const newAllPageAttachmentsAdd = allPageAttachments.map((attachments, index) =>
-        pageIndex === index ? [...attachments, action.attachment] : attachments
+        pageIndex === index ? [...attachments, newAttachment] : attachments
       );
 
-      return {
-        ...state,
+      let newStore: IStore = {
+        ...store,
         allPageAttachments: newAllPageAttachmentsAdd,
         pageAttachments: newAllPageAttachmentsAdd[pageIndex],
       };
-    }
-    case ActionType.REMOVE_ATTACHMENT: {
-      console.log('on remove page index', pageIndex);
-      const newAllPageAttachmentsRemove = allPageAttachments.map(
-        (otherPageAttachments, index) => {
-          if (pageIndex === index) {
-            return pageAttachments.filter(
-              (_, _attachmentIndex) => _attachmentIndex !== action.attachmentIndex
-            );
-          }
-          return otherPageAttachments;
-        }
 
-        // pageIndex === index
-        //   ? pageAttachments.filter(
-        //       (_, _attachmentIndex) => _attachmentIndex !== action.attachmentIndex
-        //     )
-        //   : otherPageAttachments
-      );
-      console.log(newAllPageAttachmentsRemove);
-
-      return {
-        ...state,
-        allPageAttachments: newAllPageAttachmentsRemove,
-        pageAttachments: newAllPageAttachmentsRemove[pageIndex],
-      };
+      setStore(newStore);
     }
-    case ActionType.UPDATE_ATTACHMENT: {
-      if (pageIndex === -1) {
-        return state;
+  };
+  const removeAttachment = (attachmentIndex: number) => {
+    const newAllPageAttachmentsRemove = allPageAttachments.map((otherPageAttachments, index) => {
+      if (pageIndex === index) {
+        return pageAttachments.filter(
+          (_, _attachmentIndex) => _attachmentIndex !== attachmentIndex
+        );
       }
-
-      const newAllPageAttachmentsUpdate = allPageAttachments.map((otherPageAttachments, index) =>
-        pageIndex === index
-          ? pageAttachments.map((oldAttachment, _attachmentIndex) =>
-              _attachmentIndex === action.attachmentIndex
-                ? { ...oldAttachment, ...action.attachment }
-                : oldAttachment
-            )
-          : otherPageAttachments
-      );
-
-      return {
-        ...state,
-        allPageAttachments: newAllPageAttachmentsUpdate,
-        pageAttachments: newAllPageAttachmentsUpdate[pageIndex],
-      };
-    }
-    case ActionType.UPDATE_PAGE_INDEX: {
-      console.log('on update page index', pageIndex);
-      return {
-        ...state,
-        pageIndex: action.pageIndex,
-        pageAttachments: allPageAttachments[action.pageIndex],
-      };
-    }
-    case ActionType.RESET: {
-      return {
-        pageIndex: 0,
-        pageAttachments: [],
-        allPageAttachments: Array(action.numberOfPages).fill([]),
-      };
-    }
-    default: {
-      return state;
-    }
-  }
-};
-
-export const useAttachments = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { allPageAttachments, pageAttachments } = state;
-
-  const add = (newAttachment: Attachment) =>
-    dispatch({ type: ActionType.ADD_ATTACHMENT, attachment: newAttachment });
-
-  const remove = (attachmentIndex: number) =>
-    dispatch({ type: ActionType.REMOVE_ATTACHMENT, attachmentIndex });
-
-  const update = (attachmentIndex: number, attachment: Partial<Attachment>) =>
-    dispatch({
-      type: ActionType.UPDATE_ATTACHMENT,
-      attachmentIndex,
-      attachment,
+      return otherPageAttachments;
     });
 
-  const reset = (numberOfPages: number) => dispatch({ type: ActionType.RESET, numberOfPages });
+    const newStore: IStore = {
+      ...store,
+      allPageAttachments: newAllPageAttachmentsRemove,
+      pageAttachments: newAllPageAttachmentsRemove[pageIndex],
+    };
+    setStore(newStore);
+    console.log(store);
+  };
 
-  const setPageIndex = useCallback(
-    (index: number) => {
-      console.log('number', index);
-      dispatch({ type: ActionType.UPDATE_PAGE_INDEX, pageIndex: index });
-    },
-    [dispatch]
-  );
+  const setPageIndex = (newPageIndex: number) => {
+    let newStore: IStore = {
+      ...store,
+      pageIndex: newPageIndex,
+      pageAttachments: allPageAttachments[newPageIndex],
+    };
+    setStore(newStore);
+  };
+
+  const resetAttachments = (numberOfPages: number) => {
+    let newStore: IStore = {
+      pageIndex: 0,
+      pageAttachments: [],
+      allPageAttachments: Array(numberOfPages).fill([]),
+    };
+
+    setStore(newStore);
+  };
+
+  const updateAttachement = (attachmentIndex: number, attachment: Partial<Attachment>) => {
+    if (pageIndex === -1) {
+      return;
+    }
+    const newAllPageAttachmentsUpdate = allPageAttachments.map((otherPageAttachments, index) =>
+      pageIndex === index
+        ? pageAttachments.map((oldAttachment, _attachmentIndex) =>
+            _attachmentIndex === attachmentIndex
+              ? { ...oldAttachment, ...attachment }
+              : oldAttachment
+          )
+        : otherPageAttachments
+    );
+
+    const newStore: IStore = {
+      ...store,
+      allPageAttachments: newAllPageAttachmentsUpdate as Attachments[],
+      pageAttachments: newAllPageAttachmentsUpdate[pageIndex] as Attachment[],
+    };
+    setStore(newStore);
+  };
 
   return {
-    add,
-    reset,
-    remove,
-    update,
+    addAttachment,
+    removeAttachment,
+    updateAttachement,
     setPageIndex,
-    pageAttachments,
+    resetAttachments,
     allPageAttachments,
+    pageAttachments,
+    pageIndex,
+    store,
   };
 };

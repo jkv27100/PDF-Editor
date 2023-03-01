@@ -1,7 +1,7 @@
 .resizable {
   height: 40px;
-  width: 120px;
-  min-width: 100px;
+  width: 170px;
+  min-width: 150px;
   min-height: 20px;
   position: absolute;
   background-color: transparent;
@@ -26,22 +26,21 @@
   cursor: pointer;
 }
 
-.resizableInput {
+.resizable .label {
   position: absolute;
-  word-wrap: break-word;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 100px;
-  min-height: 10px;
+  background-color: transparent;
   margin: 0;
   padding: 0;
-  width: 90px;
-  height: 20px;
-  text-align: center;
   border: none;
-  outline: none;
-  background-color: transparent;
+  width: 100%;
+  min-width: 150px;
+  min-height: 20px;
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
 }
 
 .resizers {

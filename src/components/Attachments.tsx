@@ -1,5 +1,6 @@
 import { AttachmentTypes } from '../entities';
 import { Text } from '../containers/Text';
+import { Image } from '../containers/Image';
 import { IDimensions, ITextAttachment } from '../interface';
 
 interface IProps {
@@ -12,13 +13,15 @@ interface IProps {
 
 export const Attachments = ({
   attachments,
-  pdfName,
+  removeAttachment,
   pageDimensions,
   updateAttachment,
-  removeAttachment,
 }: IProps) => {
-  const handleAttachmentUpdate = (index: number) => (attachment: Partial<Attachment>) =>
+  const handleAttachmentUpdate = (index: number) => (attachment: Partial<Attachment>) => {
+    console.log(index, attachment);
     updateAttachment(index, attachment);
+  };
+
   return attachments ? (
     <>
       {attachments.length
@@ -33,6 +36,17 @@ export const Attachments = ({
                   pageHeight={pageDimensions.height}
                   updateTextAttachment={handleAttachmentUpdate(index)}
                   {...(attachment as ITextAttachment)}
+                />
+              );
+            } else if (attachment.type === AttachmentTypes.IMAGE) {
+              return (
+                <Image
+                  key={key}
+                  pageWidth={pageDimensions.width}
+                  pageHeight={pageDimensions.height}
+                  removeImage={() => removeAttachment(index)}
+                  updateImageAttachment={handleAttachmentUpdate(index)}
+                  {...(attachment as ImageAttachment)}
                 />
               );
             }
